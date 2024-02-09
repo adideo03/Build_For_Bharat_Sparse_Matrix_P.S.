@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pincode Serviceability Checker</title>
+    <style>
+        /* Add your custom styles here */
+    </style>
+</head>
+<body>
+    <h1>Pincode Serviceability Checker</h1>
+    <form id="pincodeForm">
+        <label for="pincodeInput">Enter Pincode:</label>
+        <input type="text" id="pincodeInput" name="pincode" required>
+        <button type="submit">Check Serviceability</button>
+    </form>
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('pincodeForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var pincode = document.getElementById('pincodeInput').value;
+
+            fetch('/check', {
+                method: 'POST',
+                body: new URLSearchParams({
+                    'pincode': pincode
+                }),
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                var resultDiv = document.getElementById('result');
+                resultDiv.innerHTML = data.serviceable ? 'Pincode ' + data.pincode + ' is serviceable.' : 'Pincode ' + data.pincode + ' is not serviceable.';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
+</body>
+</html>
